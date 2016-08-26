@@ -31,12 +31,11 @@
     [_animator addBehavior:_gravity];
     
     _attach = [[UIAttachmentBehavior alloc]initWithItem:self offsetFromCenter:UIOffsetMake(0, -self.bounds.size.height*0.5) attachedToAnchor:anchor];
-//    _attach = [[UIAttachmentBehavior alloc] initWithItem:self attachedToAnchor:anchor];
     _attach.length = 100.0;
     _attach.damping = 0.1;
     _attach.frequency = 0.6;
     [_animator addBehavior:_attach];
-
+    
     _itemBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self]];
     _itemBehaviour.elasticity = 0.6;
     [_animator addBehavior:_itemBehaviour];
@@ -49,6 +48,29 @@
     
 }
 
+#pragma mark - Line Property
+
+-(void)setLineLength:(CGFloat)lineLength{
+    _lineLength = lineLength;
+    _attach.length = lineLength;
+}
+
+-(void)setLineWidth:(CGFloat)lineWidth{
+    _lineWidth = lineWidth;
+    _lineLayer.lineWidth = _lineWidth;
+}
+
+-(void)setLineColor:(UIColor *)lineColor{
+    _lineColor = lineColor;
+    _lineLayer.strokeColor = _lineColor.CGColor;
+}
+
+-(void)setDamping:(CGFloat)damping{
+    if (0 <= damping && damping <= 1) {
+        _damping = damping;
+        _attach.damping = damping;
+    }
+}
 
 #pragma mark - Line
 
@@ -65,14 +87,8 @@
     return _lineLayer;
 }
 
--(void)setLineWidth:(CGFloat)lineWidth{
-    _lineWidth = lineWidth;
-    _lineLayer.lineWidth = _lineWidth;
-}
-
--(void)setLineColor:(UIColor *)lineColor{
-    _lineColor = lineColor;
-    _lineLayer.strokeColor = _lineColor.CGColor;
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    [self updateLine];
 }
 
 -(void)updateLine{
@@ -81,10 +97,6 @@
     [bezierPath moveToPoint:_attach.anchorPoint];
     [bezierPath addLineToPoint:platePoint];
     self.lineLayer.path = bezierPath.CGPath;
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
-    [self updateLine];
 }
 
 

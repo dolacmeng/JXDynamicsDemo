@@ -19,15 +19,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //setUpWithAnchor:inView: must be called after addSubview
+    //setUpWithAnchor:inView: must be called after addSubview:
     JXDynamics *dy = [[JXDynamics alloc] initWithFrame:CGRectMake(110, 200, 50, 50)];
     [self.view addSubview:dy];
     [dy setUpWithAnchor:CGPointMake(100, 100) inView:self.view];
     
-//    UILabel *label = [[UILabel alloc] initWithFrame:dy.bounds];
-//    label.text = @"Hello";
-//    label.textAlignment = NSTextAlignmentCenter;
-//    [dy addSubview:label];
+    //Change line property
+    [dy setLineLength:30.f];
+    [dy setLineColor:[UIColor purpleColor]];
+    
+    //Add some subview
+    UILabel *label = [[UILabel alloc] initWithFrame:dy.bounds];
+    label.text = @"Hello";
+    label.textAlignment = NSTextAlignmentCenter;
+    [dy addSubview:label];
     
     //click Block
     dy.tapBlock = ^{
